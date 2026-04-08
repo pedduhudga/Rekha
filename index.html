@@ -3,148 +3,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Rekha 🎉</title>
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  background: radial-gradient(circle at center, #1a1115, #000);
+  color: white;
   overflow-x: hidden;
-  text-align: center;
-  color: #fff;
-}h1 { font-family: 'Pacifico', cursive; font-size: 3em; margin-top: 20vh; }
+}section { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
 
-.name span { display: inline-block; opacity: 0; transform: translateY(50px); animation: nameAnim 0.5s forwards; }
+h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: gold; }
 
-@keyframes nameAnim { to { opacity: 1; transform: translateY(0); } }
+/* HERO IMAGE */ .hero { width: 220px; height: 220px; border-radius: 50%; overflow: hidden; border: 5px solid #ff7eb3; box-shadow: 0 0 30px rgba(255,126,179,0.6); animation: float 4s ease-in-out infinite; }
 
-p { font-size: 1.3em; margin: 20px; }
+.hero img { width: 100%; height: 100%; object-fit: cover; }
 
-button { padding: 15px 30px; border: none; border-radius: 30px; background: #ff4da6; color: white; font-size: 1.2em; cursor: pointer; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-.balloon { position: absolute; bottom: -150px; width: 50px; height: 70px; border-radius: 50%; animation: float 10s infinite; opacity: 0.7; }
+/* 3D GALLERY */ .gallery-container { perspective: 1000px; margin-top: 30px; }
 
-@keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-120vh); } }
+.gallery { width: 200px; height: 300px; position: relative; transform-style: preserve-3d; transition: transform 1s; }
 
-.spark { position: absolute; width: 5px; height: 5px; background: white; border-radius: 50%; animation: sparkle 2s infinite; }
+.gallery img { position: absolute; width: 100%; height: 100%; object-fit: cover; border-radius: 20px; border: 4px solid #ff7eb3; box-shadow: 0 0 20px rgba(255,126,179,0.5); }
 
-@keyframes sparkle { 0%,100% { opacity: 0; } 50% { opacity: 1; } }
+/* BUTTON */ button { padding: 15px 30px; border-radius: 30px; border: none; background: linear-gradient(45deg,#ff7eb3,#8b5cf6); color: white; font-size: 1.2rem; cursor: pointer; }
 
-.cake { margin-top: 30px; cursor: pointer; font-size: 5em; }
-
-/* BEAUTIFUL BIG PHOTO GRID */ .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; margin-top: 20px; }
-
-.photo { width: 100%; height: 220px; object-fit: cover; border-radius: 20px; opacity: 0; transform: scale(0.8); animation: photoAnim 1s forwards; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.4s, box-shadow 0.4s; }
-
-.photo:hover { transform: scale(1.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-
-.photo:nth-child(1) { animation-delay: 0.5s; } .photo:nth-child(2) { animation-delay: 1s; } .photo:nth-child(3) { animation-delay: 1.5s; } .photo:nth-child(4) { animation-delay: 2s; } .photo:nth-child(5) { animation-delay: 2.5s; }
-
-@keyframes photoAnim { to { opacity: 1; transform: scale(1); } }
-
-/* FULLSCREEN VIEW */ .viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; visibility: hidden; }
-
-.viewer img { max-width: 90%; max-height: 90%; border-radius: 20px; }
-
-.viewer.active { visibility: visible; }
-
-/* FIREWORKS */ .firework { position: absolute; width: 6px; height: 6px; background: yellow; border-radius: 50%; animation: explode 1s ease-out forwards; }
-
-@keyframes explode { from { transform: scale(1); opacity: 1; } to { transform: scale(10); opacity: 0; } }
-
-.hidden { display: none; } </style>
+.hidden { display:none; } </style>
 
 </head>
-<body><h1 id="title">A Special Surprise 🎁</h1>
-<p id="message">Click below to reveal something magical ✨</p>
-<button onclick="reveal()">Reveal</button><div id="wish" class="hidden">
-  <h1 class="name" id="animatedName"></h1>
-  <p>
-    Dear Rekha,<br><br>
+<body><section id="start">
+  <h1>🎁 A Surprise</h1>
+  <button onclick="start()">Open</button>
+</section><section id="main" class="hidden">
+  <div class="hero">
+    <img src="IMG-20251110-WA0009.jpg">
+  </div>  <h1 id="name"></h1>  <p>
     Wishing you a day filled with joy, laughter, and beautiful moments 🌸<br>
-    May every smile today turn into a wonderful memory 💕<br>
-    May happiness follow you wherever you go ✨<br><br>
-    Keep shining bright and enjoying every moment ⭐<br>
-    This day is all about celebrating you 🎉💫
-  </p>  <div class="cake" onclick="cutCake()">🎂</div>
-  <p id="cakeMsg" class="hidden">✨ Cake Cut! Make a Wish Rekha 💖 ✨</p>  <div class="gallery">
-    <img src="IMG-20251110-WA0009.jpg" class="photo" onclick="openImage(this.src)">
-    <img src="IMG-20251203-WA0119.jpg" class="photo" onclick="openImage(this.src)">
-    <img src="IMG_20250916_154443_953.jpg" class="photo" onclick="openImage(this.src)">
-    <img src="IMG_20250916_154446_467.jpg" class="photo" onclick="openImage(this.src)">
-    <img src="IMG_20251011_234058_532.jpg" class="photo" onclick="openImage(this.src)">
+    May every smile turn into a memory 💕
+  </p>  <div class="gallery-container">
+    <div class="gallery" id="gallery">
+      <img src="IMG-20251110-WA0009.jpg" style="transform: rotateY(0deg) translateZ(300px)">
+      <img src="IMG-20251203-WA0119.jpg" style="transform: rotateY(72deg) translateZ(300px)">
+      <img src="IMG_20250916_154443_953.jpg" style="transform: rotateY(144deg) translateZ(300px)">
+      <img src="IMG_20250916_154446_467.jpg" style="transform: rotateY(216deg) translateZ(300px)">
+      <img src="IMG_20251011_234058_532.jpg" style="transform: rotateY(288deg) translateZ(300px)">
+    </div>
   </div>
-</div><div class="viewer" id="viewer" onclick="closeImage()">
-  <img id="fullImg">
-</div><script>
-function reveal() {
-  document.getElementById('title').style.display = 'none';
-  document.getElementById('message').style.display = 'none';
-  document.querySelector('button').style.display = 'none';
-  document.getElementById('wish').classList.remove('hidden');
-
-  animateName("Rekha");
-  launchBalloons();
-  launchSparks();
-  launchFireworks();
+</section><script>
+function start() {
+  document.getElementById('start').classList.add('hidden');
+  document.getElementById('main').classList.remove('hidden');
+  animateName('Rekha');
+  rotateGallery();
 }
 
-function animateName(name) {
-  let container = document.getElementById("animatedName");
-  container.innerHTML = "";
-  name.split("").forEach((char, index) => {
-    let span = document.createElement("span");
-    span.textContent = char;
-    span.style.animationDelay = index * 0.2 + "s";
-    container.appendChild(span);
+function animateName(text) {
+  let el = document.getElementById('name');
+  el.innerHTML = '';
+  text.split('').forEach((c,i)=>{
+    let span=document.createElement('span');
+    span.textContent=c;
+    span.style.opacity=0;
+    span.style.animation=`fade 0.5s ${i*0.2}s forwards`;
+    el.appendChild(span);
   });
 }
 
-function cutCake() {
-  document.getElementById('cakeMsg').classList.remove('hidden');
-  alert("🎉 Happy Birthday Rekha! 🎂");
+function rotateGallery(){
+  let g=document.getElementById('gallery');
+  let angle=0;
+  setInterval(()=>{
+    angle+=72;
+    g.style.transform=`rotateY(${angle}deg)`;
+  },2000);
 }
-
-function openImage(src) {
-  document.getElementById('viewer').classList.add('active');
-  document.getElementById('fullImg').src = src;
-}
-
-function closeImage() {
-  document.getElementById('viewer').classList.remove('active');
-}
-
-function launchBalloons() {
-  for (let i = 0; i < 20; i++) {
-    let b = document.createElement('div');
-    b.className = 'balloon';
-    b.style.left = Math.random() * 100 + 'vw';
-    b.style.background = `hsl(${Math.random()*360},70%,60%)`;
-    b.style.animationDuration = (5 + Math.random() * 5) + 's';
-    document.body.appendChild(b);
-  }
-}
-
-function launchSparks() {
-  setInterval(() => {
-    let s = document.createElement('div');
-    s.className = 'spark';
-    s.style.left = Math.random() * 100 + 'vw';
-    s.style.top = Math.random() * 100 + 'vh';
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 2000);
-  }, 100);
-}
-
-function launchFireworks() {
-  setInterval(() => {
-    let f = document.createElement('div');
-    f.className = 'firework';
-    f.style.left = Math.random() * 100 + 'vw';
-    f.style.top = Math.random() * 100 + 'vh';
-    document.body.appendChild(f);
-    setTimeout(() => f.remove(), 1000);
-  }, 300);
-}
-</script></body>
+</script><style>
+@keyframes fade { to { opacity:1 } }
+</style></body>
 </html>
