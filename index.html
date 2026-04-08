@@ -1,110 +1,262 @@
-
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Rekha 🎉</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: radial-gradient(circle at center, #1a1115, #000);
   color: white;
+  overflow-x: hidden;
+}
+
+/* SECTION FIX */
+section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  color: gold;
+}
+
+/* START IMAGE */
+.start-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 5px solid #ff7eb3;
+  box-shadow: 0 0 25px #ff7eb3;
   overflow: hidden;
-}section { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  margin-bottom: 20px;
+}
 
-h1 { font-family: 'Playfair Display', serif; color: gold; }
+.start-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-/* FIRST PAGE PHOTO */ .start-img { width: 180px; height: 180px; border-radius: 50%; border: 5px solid #ff7eb3; box-shadow: 0 0 25px #ff7eb3; overflow: hidden; margin-bottom: 20px; } .start-img img { width:100%; height:100%; object-fit:cover; }
+button {
+  padding: 12px 30px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(45deg,#ff7eb3,#8b5cf6);
+  color: white;
+  font-size: 1rem;
+}
 
-button { padding: 12px 30px; border-radius: 30px; border: none; background: linear-gradient(45deg,#ff7eb3,#8b5cf6); color: white; font-size: 1rem; }
+/* TOP PHOTO FIX */
+.top-photo {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid #ff7eb3;
+  box-shadow: 0 0 20px #ff7eb3;
+  overflow: hidden;
+  z-index: 10;
+}
 
-/* TOP ROUND PHOTO */ .top-photo { position: absolute; top: 20px; width: 120px; height: 120px; border-radius: 50%; border: 4px solid #ff7eb3; box-shadow: 0 0 20px #ff7eb3; overflow: hidden; } .top-photo img { width:100%; height:100%; object-fit:cover; }
+.top-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-/* GALLERY */ .gallery { position: relative; width: 100%; height: 300px; margin-top: 30px; display: flex; align-items: center; justify-content: center; }
+/* TEXT SPACING */
+#main h1 {
+  margin-top: 140px;
+}
 
-.card { position: absolute; width: 200px; height: 260px; border-radius: 20px; overflow: hidden; border: 4px solid #ff7eb3; box-shadow: 0 0 20px #ff7eb3; transition: 0.5s; }
+/* GALLERY */
+.gallery {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
-.card img { width:100%; height:100%; object-fit:cover; }
+/* CARD */
+.card {
+  position: absolute;
+  width: 180px;
+  height: 240px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 4px solid #ff7eb3;
+  box-shadow: 0 0 20px #ff7eb3;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
 
-/* FULL VIEW */ .viewer { position: fixed; top:0;left:0; width:100%;height:100%; background:black; display:none; align-items:center; justify-content:center; } .viewer img { width:90%; border-radius:20px; }
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-.hidden { display:none; } </style>
+/* VIEWER FIX */
+.viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
 
+/* IMAGE FIT FIX */
+.viewer img {
+  max-width: 95%;
+  max-height: 90%;
+  border-radius: 20px;
+}
+
+/* CLOSE HINT */
+.viewer::after {
+  content: "Tap anywhere to close";
+  position: absolute;
+  bottom: 20px;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.hidden {
+  display: none;
+}
+</style>
 </head>
-<body><!-- PAGE 1 --><section id="start">
+
+<body>
+
+<!-- PAGE 1 -->
+<section id="start">
   <div class="start-img">
     <img src="IMG-20251110-WA0009.jpg">
   </div>
+
   <h1>🎁 A Surprise</h1>
   <button onclick="openPage()">Open</button>
-</section><!-- PAGE 2 --><section id="main" class="hidden">  <div class="top-photo">
+</section>
+
+<!-- PAGE 2 -->
+<section id="main" class="hidden">
+
+  <div class="top-photo">
     <img src="IMG-20251110-WA0009.jpg">
-  </div>  <h1 style="margin-top:140px">Rekha</h1>  <p>
+  </div>
+
+  <h1>Rekha</h1>
+
+  <p>
     Dear Rekha,<br><br>
     Wishing you a day filled with joy, laughter, and beautiful moments 🌸<br>
     May every smile today turn into a wonderful memory 💕<br>
     May happiness follow you wherever you go ✨<br><br>
     Keep shining bright and enjoying every moment ⭐<br>
     This day is all about celebrating you 🎉💫
-  </p>  <div class="gallery" id="gallery">
+  </p>
+
+  <div class="gallery" id="gallery">
     <div class="card"><img src="IMG-20251110-WA0009.jpg"></div>
     <div class="card"><img src="IMG-20251203-WA0119.jpg"></div>
     <div class="card"><img src="IMG_20250916_154443_953.jpg"></div>
     <div class="card"><img src="IMG_20250916_154446_467.jpg"></div>
     <div class="card"><img src="IMG_20251011_234058_532.jpg"></div>
   </div>
-</section><!-- FULL VIEW --><div class="viewer" id="viewer" onclick="closeViewer()">
+
+</section>
+
+<!-- FULL VIEW -->
+<div class="viewer" id="viewer" onclick="closeViewer()">
   <img id="viewImg">
-</div><script>
+</div>
+
+<script>
 function openPage(){
   document.getElementById('start').classList.add('hidden');
   document.getElementById('main').classList.remove('hidden');
   arrange();
 }
 
+/* ARRANGE CARDS */
 function arrange(){
-  let cards=document.querySelectorAll('.card');
+  const cards = document.querySelectorAll('.card');
   cards.forEach((c,i)=>{
-    c.style.transform=`translateX(${(i-2)*120}px) scale(${i==2?1.2:0.8})`;
-    c.style.zIndex=i==2?5:1;
+    let offset = i - 2;
+    c.style.transform = `translateX(${offset * 110}px) scale(${i==2?1:0.8})`;
+    c.style.zIndex = i==2 ? 5 : 1;
+    c.style.opacity = Math.abs(offset) > 2 ? 0 : 1;
 
-    c.onclick=()=>openViewer(c.querySelector('img').src);
+    c.onclick = () => openViewer(c.querySelector('img').src);
   });
 }
 
+/* VIEWER */
 function openViewer(src){
   document.getElementById('viewer').style.display='flex';
-  document.getElementById('viewImg').src=src;
+  document.getElementById('viewImg').src = src;
 }
 
 function closeViewer(){
   document.getElementById('viewer').style.display='none';
 }
 
-// SWIPE
-let startX=0;
-document.getElementById('gallery').addEventListener('touchstart',e=>{
-  startX=e.touches[0].clientX;
+/* SWIPE LOGIC */
+let startX = 0;
+let index = 0;
+
+const gallery = document.getElementById('gallery');
+
+gallery.addEventListener('touchstart', e=>{
+  startX = e.touches[0].clientX;
 });
 
-document.getElementById('gallery').addEventListener('touchend',e=>{
-  let endX=e.changedTouches[0].clientX;
-  if(startX-endX>50) rotate(1);
-  if(endX-startX>50) rotate(-1);
+gallery.addEventListener('touchend', e=>{
+  let endX = e.changedTouches[0].clientX;
+
+  if(startX - endX > 50) rotate(1);
+  if(endX - startX > 50) rotate(-1);
 });
 
-let index=0;
+/* ROTATION */
 function rotate(dir){
-  let cards=[...document.querySelectorAll('.card')];
-  index=(index+dir+cards.length)%cards.length;
+  const cards = [...document.querySelectorAll('.card')];
+  index = (index + dir + cards.length) % cards.length;
+
   cards.forEach((c,i)=>{
-    let pos=(i-index+cards.length)%cards.length;
-    let offset=pos-2;
-    c.style.transform=`translateX(${offset*120}px) scale(${pos==2?1.2:0.8})`;
-    c.style.zIndex=pos==2?5:1;
+    let pos = (i - index + cards.length) % cards.length;
+    let offset = pos - 2;
+
+    c.style.transform = `translateX(${offset * 110}px) scale(${pos==2?1:0.8})`;
+    c.style.zIndex = pos==2 ? 5 : 1;
+    c.style.opacity = Math.abs(offset) > 2 ? 0 : 1;
   });
 }
-</script></body>
+</script>
+
+</body>
 </html>
