@@ -1,206 +1,267 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Rekha 🎉</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Rekha</title>
+    <style>
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000;
+            overflow: hidden; /* Prevent body scrolling, keep it app-like */
+        }
 
-<style>
+        /* Dynamic Background Layer */
+        #background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-image 0.8s ease-in-out;
+            z-index: 1;
+        }
 
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background: radial-gradient(circle,#12080c,#000);
-  color:white;
-  overflow:hidden;
-}
+        /* Dark overlay to make text readable */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 2;
+        }
 
-/* LAYOUT */
-.container{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-between;
-  padding:20px 10px;
-  box-sizing:border-box;
-}
+        /* Main Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100dvh; /* Use dynamic viewport height for mobile */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* Spaces top, middle, bottom evenly */
+            padding: 30px 15px 20px 15px;
+        }
 
-/* TOP PHOTO */
-.top-photo{
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  border:4px solid #ff7eb3;
-  box-shadow:0 0 25px #ff7eb3;
-  overflow:hidden;
-}
-.top-photo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+        /* 1. TOP PHOTO (Fixed from being pushed out) */
+        .top-profile-container {
+            flex-shrink: 0;
+            margin-top: 10px;
+        }
+        
+        .top-profile-pic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ff69b4; /* Pink border */
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+            animation: float 3s ease-in-out infinite;
+        }
 
-/* TEXT */
-.text{
-  text-align:center;
-  max-width:320px;
-}
+        /* 2. MIDDLE WISHES (Fixed to stay visible) */
+        .wishes-container {
+            text-align: center;
+            color: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+        }
 
-.text h1{
-  font-family:'Playfair Display';
-  color:gold;
-  margin:10px 0;
-}
+        .name {
+            color: #FFD700; /* Yellow */
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            font-family: Georgia, serif;
+        }
 
-.text p{
-  font-size:14px;
-  line-height:1.5;
-}
+        .wishes-text {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        
+        .wishes-text p {
+            margin-bottom: 8px;
+        }
 
-/* GALLERY */
-.gallery{
-  position:relative;
-  width:100%;
-  height:260px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
+        /* 3. BOTTOM GALLERY (Smooth & Cute scrolling) */
+        .gallery-container {
+            width: 100%;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 20px calc(50% - 40px); /* Centers the first/last items */
+            gap: 15px;
+            /* Hide scrollbar */
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        
+        .gallery-container::-webkit-scrollbar {
+            display: none;
+        }
 
-/* CARD */
-.card{
-  position:absolute;
-  width:200px;   /* slightly bigger */
-  height:260px;
-  border-radius:20px;
-  overflow:hidden;
-  border:4px solid #ff7eb3;
-  box-shadow:0 0 20px #ff7eb3;
-  transition:0.4s ease;
-}
+        /* Thumbnails Styling */
+        .thumb {
+            width: 70px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            flex-shrink: 0; /* Prevent shrinking */
+            border: 2px solid rgba(255, 105, 180, 0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0.7;
+        }
 
-.card img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+        /* Active Thumbnail (Cute pop-out effect) */
+        .thumb.active {
+            width: 110px;
+            height: 150px;
+            border: 3px solid #ff69b4; /* Glowing hot pink */
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.9);
+            opacity: 1;
+            transform: translateY(-10px); /* Pulls it up slightly */
+            z-index: 10;
+        }
 
-/* POSITIONS */
-.left{
-  transform:translateX(-120px) scale(0.8);
-  opacity:0.6;
-  z-index:1;
-}
-
-.center{
-  transform:translateX(0) scale(1);
-  z-index:5;
-}
-
-.right{
-  transform:translateX(120px) scale(0.8);
-  opacity:0.6;
-  z-index:1;
-}
-
-.hidden{
-  opacity:0;
-  pointer-events:none;
-}
-
-</style>
+        /* Simple floating animation for the top photo */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
+    <!-- Dynamic Background -->
+    <div id="background-layer"></div>
+    <div class="overlay"></div>
 
-<!-- TOP -->
-<div class="top-photo">
-  <img src="IMG-20251110-WA0009.jpg">
-</div>
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        
+        <!-- Top Profile Photo -->
+        <div class="top-profile-container">
+            <!-- REPLACE THIS SRC WITH YOUR TOP PROFILE PHOTO URL -->
+            <img src="https://picsum.photos/400/400?random=10" alt="Profile" class="top-profile-pic" id="top-avatar">
+        </div>
 
-<!-- TEXT -->
-<div class="text">
-  <h1>Rekha</h1>
-  <p>
-    Dear Rekha,<br><br>
-    Wishing you a day filled with joy 🌸<br>
-    May every smile become a memory 💕<br>
-    Stay happy always ✨
-  </p>
-</div>
+        <!-- Birthday Wishes (Always visible) -->
+        <div class="wishes-container">
+            <h1 class="name">Rekha</h1>
+            <div class="wishes-text">
+                <p>Dear Rekha,</p>
+                <p>Wishing you a day filled with joy, laughter, and beautiful moments 🌸</p>
+                <p>May every smile today turn into a wonderful memory 💕</p>
+                <p>May happiness follow you wherever you go ✨</p>
+                <br>
+                <p>Keep shining bright and enjoying every moment 🌟</p>
+                <p>This day is all about celebrating you 🎉💫</p>
+            </div>
+        </div>
 
-<!-- GALLERY -->
-<div class="gallery" id="gallery">
-  <div class="card"><img src="IMG-20251110-WA0009.jpg"></div>
-  <div class="card"><img src="IMG-20251203-WA0119.jpg"></div>
-  <div class="card"><img src="IMG_20250916_154443_953.jpg"></div>
-  <div class="card"><img src="IMG_20250916_154446_467.jpg"></div>
-  <div class="card"><img src="IMG_20251011_234058_532.jpg"></div>
-</div>
+        <!-- Smooth & Cute Carousel Gallery -->
+        <div class="gallery-container" id="gallery">
+            <!-- Images will be inserted here by JavaScript -->
+        </div>
 
-</div>
+    </div>
 
-<script>
+    <script>
+        // ==========================================
+        // 📸 INSTRUCTIONS: REPLACE THESE IMAGE URLS
+        // Replace the links below with your actual image file names.
+        // For example: "photo1.jpg", "photo2.jpg", "photo3.jpg"
+        // ==========================================
+        const photos = [
+            "https://picsum.photos/800/1200?random=1",
+            "https://picsum.photos/800/1200?random=2",
+            "https://picsum.photos/800/1200?random=3",
+            "https://picsum.photos/800/1200?random=4",
+            "https://picsum.photos/800/1200?random=5"
+        ];
 
-/* SLIDESHOW STATE */
-let index = 0;
-const cards = [...document.querySelectorAll('.card')];
+        const gallery = document.getElementById('gallery');
+        const backgroundLayer = document.getElementById('background-layer');
+        let activeIndex = 0;
 
-/* RENDER */
-function render(){
-  cards.forEach((c,i)=>{
-    c.className='card';
+        // Function to initialize the gallery
+        function initGallery() {
+            photos.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.classList.add('thumb');
+                
+                // Set the first image as active by default
+                if (index === activeIndex) {
+                    img.classList.add('active');
+                    updateBackground(src);
+                }
 
-    if(i===index) c.classList.add('center');
-    else if(i===index-1 || (index===0 && i===cards.length-1))
-      c.classList.add('left');
-    else if(i===index+1 || (index===cards.length-1 && i===0))
-      c.classList.add('right');
-    else
-      c.classList.add('hidden');
+                // Add click event for each photo
+                img.addEventListener('click', () => {
+                    setActive(index, img, src);
+                });
 
-    /* CLICK TO CENTER */
-    c.onclick = () => {
-      index = i;
-      render();
-    };
-  });
-}
+                gallery.appendChild(img);
+            });
+        }
 
-/* SWIPE CONTROL */
-let startX=0;
+        // Function to handle clicking an image
+        function setActive(index, element, src) {
+            // Remove active class from all thumbnails
+            const allThumbs = document.querySelectorAll('.thumb');
+            allThumbs.forEach(thumb => thumb.classList.remove('active'));
 
-document.getElementById('gallery').addEventListener('touchstart',e=>{
-  startX=e.touches[0].clientX;
-});
+            // Add active class to clicked thumbnail
+            element.classList.add('active');
+            
+            // Update the background image smoothly
+            updateBackground(src);
 
-document.getElementById('gallery').addEventListener('touchend',e=>{
-  let endX=e.changedTouches[0].clientX;
+            // Smoothly scroll the gallery to center the clicked image
+            element.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            
+            activeIndex = index;
+        }
 
-  if(startX-endX>50) next();
-  if(endX-startX>50) prev();
-});
+        // Function to update the background layer
+        function updateBackground(src) {
+            backgroundLayer.style.backgroundImage = `url('${src}')`;
+        }
 
-function next(){
-  index=(index+1)%cards.length;
-  render();
-}
-
-function prev(){
-  index=(index-1+cards.length)%cards.length;
-  render();
-}
-
-/* INIT */
-render();
-
-</script>
-
+        // Run setup when page loads
+        window.onload = initGallery;
+    </script>
 </body>
 </html>
+
+```
