@@ -9,7 +9,7 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  overflow: hidden;
+  overflow-x: hidden;
   text-align: center;
   color: #fff;
 }h1 { font-family: 'Pacifico', cursive; font-size: 3em; margin-top: 20vh; }
@@ -22,7 +22,7 @@ p { font-size: 1.3em; margin: 20px; }
 
 button { padding: 15px 30px; border: none; border-radius: 30px; background: #ff4da6; color: white; font-size: 1.2em; cursor: pointer; }
 
-.balloon { position: absolute; bottom: -150px; width: 50px; height: 70px; border-radius: 50%; animation: float 10s infinite; }
+.balloon { position: absolute; bottom: -150px; width: 50px; height: 70px; border-radius: 50%; animation: float 10s infinite; opacity: 0.7; }
 
 @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-120vh); } }
 
@@ -32,13 +32,21 @@ button { padding: 15px 30px; border: none; border-radius: 30px; background: #ff4
 
 .cake { margin-top: 30px; cursor: pointer; font-size: 5em; }
 
-/* PHOTO GALLERY */ .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-top: 20px; }
+/* BEAUTIFUL BIG PHOTO GRID */ .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; margin-top: 20px; }
 
-.photo { width: 120px; height: 120px; object-fit: cover; border-radius: 20px; opacity: 0; transform: scale(0.5); animation: photoAnim 1s forwards; }
+.photo { width: 100%; height: 220px; object-fit: cover; border-radius: 20px; opacity: 0; transform: scale(0.8); animation: photoAnim 1s forwards; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: transform 0.4s, box-shadow 0.4s; }
+
+.photo:hover { transform: scale(1.1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
 
 .photo:nth-child(1) { animation-delay: 0.5s; } .photo:nth-child(2) { animation-delay: 1s; } .photo:nth-child(3) { animation-delay: 1.5s; } .photo:nth-child(4) { animation-delay: 2s; } .photo:nth-child(5) { animation-delay: 2.5s; }
 
 @keyframes photoAnim { to { opacity: 1; transform: scale(1); } }
+
+/* FULLSCREEN VIEW */ .viewer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; visibility: hidden; }
+
+.viewer img { max-width: 90%; max-height: 90%; border-radius: 20px; }
+
+.viewer.active { visibility: visible; }
 
 /* FIREWORKS */ .firework { position: absolute; width: 6px; height: 6px; background: yellow; border-radius: 50%; animation: explode 1s ease-out forwards; }
 
@@ -59,13 +67,15 @@ button { padding: 15px 30px; border: none; border-radius: 30px; background: #ff4
     Keep shining bright and enjoying every moment ⭐<br>
     This day is all about celebrating you 🎉💫
   </p>  <div class="cake" onclick="cutCake()">🎂</div>
-  <p id="cakeMsg" class="hidden">✨ Cake Cut! Make a Wish Rekha 💖 ✨</p>  <!-- PHOTO GALLERY -->  <div class="gallery">
-    <img src="IMG-20251110-WA0009.jpg" class="photo">
-    <img src="IMG-20251203-WA0119.jpg" class="photo">
-    <img src="IMG_20250916_154443_953.jpg" class="photo">
-    <img src="IMG_20250916_154446_467.jpg" class="photo">
-    <img src="IMG_20251011_234058_532.jpg" class="photo">
+  <p id="cakeMsg" class="hidden">✨ Cake Cut! Make a Wish Rekha 💖 ✨</p>  <div class="gallery">
+    <img src="IMG-20251110-WA0009.jpg" class="photo" onclick="openImage(this.src)">
+    <img src="IMG-20251203-WA0119.jpg" class="photo" onclick="openImage(this.src)">
+    <img src="IMG_20250916_154443_953.jpg" class="photo" onclick="openImage(this.src)">
+    <img src="IMG_20250916_154446_467.jpg" class="photo" onclick="openImage(this.src)">
+    <img src="IMG_20251011_234058_532.jpg" class="photo" onclick="openImage(this.src)">
   </div>
+</div><div class="viewer" id="viewer" onclick="closeImage()">
+  <img id="fullImg">
 </div><script>
 function reveal() {
   document.getElementById('title').style.display = 'none';
@@ -82,7 +92,6 @@ function reveal() {
 function animateName(name) {
   let container = document.getElementById("animatedName");
   container.innerHTML = "";
-
   name.split("").forEach((char, index) => {
     let span = document.createElement("span");
     span.textContent = char;
@@ -94,6 +103,15 @@ function animateName(name) {
 function cutCake() {
   document.getElementById('cakeMsg').classList.remove('hidden');
   alert("🎉 Happy Birthday Rekha! 🎂");
+}
+
+function openImage(src) {
+  document.getElementById('viewer').classList.add('active');
+  document.getElementById('fullImg').src = src;
+}
+
+function closeImage() {
+  document.getElementById('viewer').classList.remove('active');
 }
 
 function launchBalloons() {
