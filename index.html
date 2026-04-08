@@ -8,10 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 
 <style>
+
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:radial-gradient(circle,#1a1115,#000);
+  background: radial-gradient(circle,#12080c,#000);
   color:white;
   overflow:hidden;
 }
@@ -27,7 +28,7 @@ section{
   position:relative;
 }
 
-/* TOP PHOTO CENTER */
+/* TOP IMAGE (STABLE + PREMIUM) */
 .top-photo{
   position:absolute;
   top:20px;
@@ -39,62 +40,86 @@ section{
   border:4px solid #ff7eb3;
   box-shadow:0 0 25px #ff7eb3;
   overflow:hidden;
+  animation: pulse 2s infinite;
 }
 .top-photo img{width:100%;height:100%;object-fit:cover;}
 
-h1{color:gold;margin-top:140px;font-family:'Playfair Display';}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 20px #ff7eb3;}
+  50%{box-shadow:0 0 40px #ff7eb3;}
+}
 
-/* GALLERY */
-.gallery{
+/* TEXT */
+h1{
+  color:gold;
+  margin-top:140px;
+  font-family:'Playfair Display';
+}
+
+/* RADIAL CAROUSEL */
+.carousel{
   position:relative;
-  width:100%;
-  height:260px;
-  margin-top:30px;
+  width:300px;
+  height:300px;
+  margin-top:40px;
 }
 
 /* CARD */
 .card{
   position:absolute;
-  width:170px;
-  height:230px;
+  width:150px;
+  height:200px;
   border-radius:20px;
   overflow:hidden;
-  border:4px solid #ff7eb3;
-  box-shadow:0 0 20px #ff7eb3;
-  transition:0.5s ease;
+  border:3px solid #ff7eb3;
+  box-shadow:0 0 15px #ff7eb3;
+  transition:0.6s ease;
 }
-.card img{width:100%;height:100%;object-fit:cover;}
+.card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-/* FLOAT VIEWER (NON BLOCKING) */
+/* CENTER VIEW (NO UI BREAK) */
 .viewer{
   position:fixed;
-  bottom:20px;
-  right:20px;
-  width:140px;
-  height:180px;
-  border-radius:15px;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  width:80%;
+  max-width:350px;
+  border-radius:20px;
   overflow:hidden;
-  border:3px solid #fff;
-  display:none;
   z-index:50;
+  transition:0.4s ease;
 }
-.viewer img{width:100%;height:100%;object-fit:cover;}
+.viewer img{
+  width:100%;
+}
 
-/* HEART PARTICLES */
+/* ACTIVE VIEW */
+.viewer.show{
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* BACK BLUR (NOT HIDING TEXT COMPLETELY) */
+.blur{
+  filter:blur(6px);
+  opacity:0.3;
+}
+
+/* HEARTS */
 .heart{
   position:absolute;
   color:#ff7eb3;
-  font-size:20px;
   animation:float 6s linear infinite;
-  opacity:0.7;
 }
-
 @keyframes float{
-  0%{transform:translateY(100vh) scale(0.5);}
-  100%{transform:translateY(-10vh) scale(1);}
+  0%{transform:translateY(100vh);}
+  100%{transform:translateY(-10vh);}
 }
 
-.hidden{display:none;}
 </style>
 </head>
 
@@ -108,73 +133,76 @@ h1{color:gold;margin-top:140px;font-family:'Playfair Display';}
 
 <h1>Rekha</h1>
 
-<p>
+<p id="text">
 Dear Rekha,<br><br>
 Wishing you a day filled with joy 🌸<br>
 May every smile become a memory 💕<br>
 Stay happy always ✨
 </p>
 
-<div class="gallery" id="gallery">
-<div class="card"><img src="IMG-20251110-WA0009.jpg"></div>
-<div class="card"><img src="IMG-20251203-WA0119.jpg"></div>
-<div class="card"><img src="IMG_20250916_154443_953.jpg"></div>
-<div class="card"><img src="IMG_20250916_154446_467.jpg"></div>
-<div class="card"><img src="IMG_20251011_234058_532.jpg"></div>
+<div class="carousel" id="carousel">
+  <div class="card"><img src="IMG-20251110-WA0009.jpg"></div>
+  <div class="card"><img src="IMG-20251203-WA0119.jpg"></div>
+  <div class="card"><img src="IMG_20250916_154443_953.jpg"></div>
+  <div class="card"><img src="IMG_20250916_154446_467.jpg"></div>
+  <div class="card"><img src="IMG_20251011_234058_532.jpg"></div>
 </div>
 
 </section>
 
-<!-- FLOAT VIEW -->
 <div class="viewer" id="viewer">
 <img id="viewImg">
 </div>
 
 <script>
 
-/* ARRANGE */
-let index=0;
+/* RADIAL POSITIONING */
 const cards=[...document.querySelectorAll('.card')];
+let angle=0;
 
-function update(){
+function arrange(){
+  const radius=120;
   cards.forEach((c,i)=>{
-    let pos=(i-index+cards.length)%cards.length;
-    let offset=pos-2;
+    let theta=(i*(2*Math.PI/cards.length))+angle;
 
-    c.style.transform=`translateX(${offset*100}px) scale(${pos==2?1:0.8})`;
-    c.style.zIndex=pos==2?5:1;
-    c.style.opacity=Math.abs(offset)>2?0:1;
+    let x=radius*Math.cos(theta);
+    let y=radius*Math.sin(theta);
+
+    c.style.transform=`translate(${x}px,${y}px) scale(${y>0?1:0.8})`;
+    c.style.zIndex = Math.floor(y+200);
 
     c.onclick=()=>{
-      document.getElementById('viewer').style.display='block';
+      document.getElementById('viewer').classList.add('show');
       document.getElementById('viewImg').src=c.querySelector('img').src;
+      document.getElementById('text').classList.add('blur');
     }
   });
 }
 
-/* AUTO SLIDE */
+/* AUTO ROTATE */
 setInterval(()=>{
-  index=(index+1)%cards.length;
-  update();
-},3000);
+  angle+=0.02;
+  arrange();
+},30);
 
-/* INIT */
-update();
+arrange();
 
-/* HEART PARTICLES */
-function createHeart(){
-  const h=document.createElement('div');
+/* CLOSE VIEW */
+document.getElementById('viewer').onclick=()=>{
+  document.getElementById('viewer').classList.remove('show');
+  document.getElementById('text').classList.remove('blur');
+};
+
+/* HEARTS */
+function heart(){
+  let h=document.createElement('div');
   h.className='heart';
   h.innerHTML='❤';
   h.style.left=Math.random()*100+'%';
-  h.style.fontSize=(15+Math.random()*20)+'px';
-  h.style.animationDuration=(4+Math.random()*3)+'s';
   document.body.appendChild(h);
-
-  setTimeout(()=>h.remove(),7000);
+  setTimeout(()=>h.remove(),6000);
 }
-
-setInterval(createHeart,500);
+setInterval(heart,500);
 
 </script>
 
