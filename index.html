@@ -17,107 +17,99 @@ body{
   overflow:hidden;
 }
 
-/* SECTION */
-section{
+/* LAYOUT */
+.container{
   height:100vh;
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
-  text-align:center;
-  position:relative;
+  justify-content:space-between;
+  padding:20px 10px;
+  box-sizing:border-box;
 }
 
-/* TOP IMAGE (STABLE + PREMIUM) */
+/* TOP PHOTO */
 .top-photo{
-  position:absolute;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  width:110px;
-  height:110px;
+  width:100px;
+  height:100px;
   border-radius:50%;
   border:4px solid #ff7eb3;
   box-shadow:0 0 25px #ff7eb3;
   overflow:hidden;
-  animation: pulse 2s infinite;
 }
-.top-photo img{width:100%;height:100%;object-fit:cover;}
-
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 20px #ff7eb3;}
-  50%{box-shadow:0 0 40px #ff7eb3;}
+.top-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 /* TEXT */
-h1{
-  color:gold;
-  margin-top:140px;
-  font-family:'Playfair Display';
+.text{
+  text-align:center;
+  max-width:320px;
 }
 
-/* RADIAL CAROUSEL */
-.carousel{
+.text h1{
+  font-family:'Playfair Display';
+  color:gold;
+  margin:10px 0;
+}
+
+.text p{
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* GALLERY */
+.gallery{
   position:relative;
-  width:300px;
-  height:300px;
-  margin-top:40px;
+  width:100%;
+  height:260px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
 }
 
 /* CARD */
 .card{
   position:absolute;
-  width:150px;
-  height:200px;
+  width:200px;   /* slightly bigger */
+  height:260px;
   border-radius:20px;
   overflow:hidden;
-  border:3px solid #ff7eb3;
-  box-shadow:0 0 15px #ff7eb3;
-  transition:0.6s ease;
+  border:4px solid #ff7eb3;
+  box-shadow:0 0 20px #ff7eb3;
+  transition:0.4s ease;
 }
+
 .card img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-/* CENTER VIEW (NO UI BREAK) */
-.viewer{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%) scale(0);
-  width:80%;
-  max-width:350px;
-  border-radius:20px;
-  overflow:hidden;
-  z-index:50;
-  transition:0.4s ease;
-}
-.viewer img{
-  width:100%;
+/* POSITIONS */
+.left{
+  transform:translateX(-120px) scale(0.8);
+  opacity:0.6;
+  z-index:1;
 }
 
-/* ACTIVE VIEW */
-.viewer.show{
-  transform:translate(-50%,-50%) scale(1);
+.center{
+  transform:translateX(0) scale(1);
+  z-index:5;
 }
 
-/* BACK BLUR (NOT HIDING TEXT COMPLETELY) */
-.blur{
-  filter:blur(6px);
-  opacity:0.3;
+.right{
+  transform:translateX(120px) scale(0.8);
+  opacity:0.6;
+  z-index:1;
 }
 
-/* HEARTS */
-.heart{
-  position:absolute;
-  color:#ff7eb3;
-  animation:float 6s linear infinite;
-}
-@keyframes float{
-  0%{transform:translateY(100vh);}
-  100%{transform:translateY(-10vh);}
+.hidden{
+  opacity:0;
+  pointer-events:none;
 }
 
 </style>
@@ -125,22 +117,26 @@ h1{
 
 <body>
 
-<section id="main">
+<div class="container">
 
+<!-- TOP -->
 <div class="top-photo">
-<img src="IMG-20251110-WA0009.jpg">
+  <img src="IMG-20251110-WA0009.jpg">
 </div>
 
-<h1>Rekha</h1>
+<!-- TEXT -->
+<div class="text">
+  <h1>Rekha</h1>
+  <p>
+    Dear Rekha,<br><br>
+    Wishing you a day filled with joy 🌸<br>
+    May every smile become a memory 💕<br>
+    Stay happy always ✨
+  </p>
+</div>
 
-<p id="text">
-Dear Rekha,<br><br>
-Wishing you a day filled with joy 🌸<br>
-May every smile become a memory 💕<br>
-Stay happy always ✨
-</p>
-
-<div class="carousel" id="carousel">
+<!-- GALLERY -->
+<div class="gallery" id="gallery">
   <div class="card"><img src="IMG-20251110-WA0009.jpg"></div>
   <div class="card"><img src="IMG-20251203-WA0119.jpg"></div>
   <div class="card"><img src="IMG_20250916_154443_953.jpg"></div>
@@ -148,61 +144,61 @@ Stay happy always ✨
   <div class="card"><img src="IMG_20251011_234058_532.jpg"></div>
 </div>
 
-</section>
-
-<div class="viewer" id="viewer">
-<img id="viewImg">
 </div>
 
 <script>
 
-/* RADIAL POSITIONING */
-const cards=[...document.querySelectorAll('.card')];
-let angle=0;
+/* SLIDESHOW STATE */
+let index = 0;
+const cards = [...document.querySelectorAll('.card')];
 
-function arrange(){
-  const radius=120;
+/* RENDER */
+function render(){
   cards.forEach((c,i)=>{
-    let theta=(i*(2*Math.PI/cards.length))+angle;
+    c.className='card';
 
-    let x=radius*Math.cos(theta);
-    let y=radius*Math.sin(theta);
+    if(i===index) c.classList.add('center');
+    else if(i===index-1 || (index===0 && i===cards.length-1))
+      c.classList.add('left');
+    else if(i===index+1 || (index===cards.length-1 && i===0))
+      c.classList.add('right');
+    else
+      c.classList.add('hidden');
 
-    c.style.transform=`translate(${x}px,${y}px) scale(${y>0?1:0.8})`;
-    c.style.zIndex = Math.floor(y+200);
-
-    c.onclick=()=>{
-      document.getElementById('viewer').classList.add('show');
-      document.getElementById('viewImg').src=c.querySelector('img').src;
-      document.getElementById('text').classList.add('blur');
-    }
+    /* CLICK TO CENTER */
+    c.onclick = () => {
+      index = i;
+      render();
+    };
   });
 }
 
-/* AUTO ROTATE */
-setInterval(()=>{
-  angle+=0.02;
-  arrange();
-},30);
+/* SWIPE CONTROL */
+let startX=0;
 
-arrange();
+document.getElementById('gallery').addEventListener('touchstart',e=>{
+  startX=e.touches[0].clientX;
+});
 
-/* CLOSE VIEW */
-document.getElementById('viewer').onclick=()=>{
-  document.getElementById('viewer').classList.remove('show');
-  document.getElementById('text').classList.remove('blur');
-};
+document.getElementById('gallery').addEventListener('touchend',e=>{
+  let endX=e.changedTouches[0].clientX;
 
-/* HEARTS */
-function heart(){
-  let h=document.createElement('div');
-  h.className='heart';
-  h.innerHTML='❤';
-  h.style.left=Math.random()*100+'%';
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),6000);
+  if(startX-endX>50) next();
+  if(endX-startX>50) prev();
+});
+
+function next(){
+  index=(index+1)%cards.length;
+  render();
 }
-setInterval(heart,500);
+
+function prev(){
+  index=(index-1+cards.length)%cards.length;
+  render();
+}
+
+/* INIT */
+render();
 
 </script>
 
