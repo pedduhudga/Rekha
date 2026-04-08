@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,100 +12,69 @@ body {
   overflow: hidden;
   text-align: center;
   color: #fff;
-}
+}h1 { font-family: 'Pacifico', cursive; font-size: 3em; margin-top: 20vh; }
 
-h1 {
-  font-family: 'Pacifico', cursive;
-  font-size: 3em;
-  margin-top: 20vh;
-  animation: glow 2s infinite alternate;
-}
+.name span { display: inline-block; opacity: 0; transform: translateY(50px); animation: nameAnim 0.5s forwards; }
 
-@keyframes glow {
-  from { text-shadow: 0 0 10px #fff; }
-  to { text-shadow: 0 0 30px #ff4da6; }
-}
+@keyframes nameAnim { to { opacity: 1; transform: translateY(0); } }
 
-p {
-  font-size: 1.3em;
-  margin: 20px;
-}
+p { font-size: 1.3em; margin: 20px; }
 
-button {
-  padding: 15px 30px;
-  border: none;
-  border-radius: 30px;
-  background: #ff4da6;
-  color: white;
-  font-size: 1.2em;
-  cursor: pointer;
-  transition: 0.3s;
-}
+button { padding: 15px 30px; border: none; border-radius: 30px; background: #ff4da6; color: white; font-size: 1.2em; cursor: pointer; }
 
-button:hover {
-  transform: scale(1.1);
-  background: #ff1a75;
-}
+.balloon { position: absolute; bottom: -150px; width: 50px; height: 70px; border-radius: 50%; animation: float 10s infinite; }
 
-.balloon {
-  position: absolute;
-  bottom: -150px;
-  width: 50px;
-  height: 70px;
-  border-radius: 50%;
-  animation: float 10s infinite;
-}
+@keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-120vh); } }
 
-@keyframes float {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-120vh); }
-}
+.spark { position: absolute; width: 5px; height: 5px; background: white; border-radius: 50%; animation: sparkle 2s infinite; }
 
-.spark {
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background: white;
-  border-radius: 50%;
-  animation: sparkle 2s infinite;
-}
+@keyframes sparkle { 0%,100% { opacity: 0; } 50% { opacity: 1; } }
 
-@keyframes sparkle {
-  0%,100% { opacity: 0; }
-  50% { opacity: 1; }
-}
+.cake { margin-top: 30px; cursor: pointer; font-size: 5em; }
 
-.hidden {
-  display: none;
-}
-</style>
+.hidden { display: none; } </style>
+
 </head>
-<body>
-
-<h1 id="title">A Special Surprise 🎁</h1>
+<body><h1 id="title">A Special Surprise 🎁</h1>
 <p id="message">Click below to reveal something magical ✨</p>
-<button onclick="reveal()">Reveal</button>
-
-<div id="wish" class="hidden">
-  <h1>Happy Birthday Rekha 🎂💖</h1>
+<button onclick="reveal()">Reveal</button><div id="wish" class="hidden">
+  <h1 class="name" id="animatedName"></h1>
   <p>
     Dear Rekha,<br><br>
-    You are not just special, you are magical 🌸<br>
-    May your day be filled with love, laughter, and endless happiness 💕<br>
-    You deserve all the joy this world can offer 🌍✨<br><br>
-    Keep shining like the brightest star ⭐<br>
-    Today is all about YOU 🎉💫
-  </p>
-</div>
-
-<script>
+    Wishing you a day filled with joy, laughter, and beautiful moments 🌸<br>
+    May every smile today turn into a wonderful memory 💕<br>
+    May happiness follow you wherever you go ✨<br><br>
+    Keep shining bright and enjoying every moment ⭐<br>
+    This day is all about celebrating you 🎉💫
+  </p>  <div class="cake" onclick="cutCake()">🎂</div>
+  <p id="cakeMsg" class="hidden">✨ Cake Cut! Make a Wish Rekha 💖 ✨</p>
+</div><script>
 function reveal() {
   document.getElementById('title').style.display = 'none';
   document.getElementById('message').style.display = 'none';
   document.querySelector('button').style.display = 'none';
   document.getElementById('wish').classList.remove('hidden');
+
+  animateName("Rekha");
   launchBalloons();
   launchSparks();
+}
+
+function animateName(name) {
+  let container = document.getElementById("animatedName");
+  container.innerHTML = "";
+
+  name.split("").forEach((char, index) => {
+    let span = document.createElement("span");
+    span.textContent = char;
+    span.style.animationDelay = index * 0.2 + "s";
+    container.appendChild(span);
+  });
+}
+
+function cutCake() {
+  document.getElementById('cakeMsg').classList.remove('hidden');
+  alert("🎉 Happy Birthday Rekha! 🎂");
 }
 
 function launchBalloons() {
@@ -130,8 +98,5 @@ function launchSparks() {
     setTimeout(() => s.remove(), 2000);
   }, 100);
 }
-</script>
-
-</body>
+</script></body>
 </html>
-
